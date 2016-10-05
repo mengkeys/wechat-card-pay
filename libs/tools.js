@@ -5,6 +5,7 @@
 var qs = require('querystring');
 var parser = require('xml2js');
 var crypto = require('crypto');
+var _ = require('underscore');
 
 // 开放对象
 module.exports =  tools = {};
@@ -39,7 +40,7 @@ tools.nonce = function (){
     var buf = crypto.randomBytes(32);
     var string = buf.toString('base64');
     string = string.replace(/\//g,'').replace(/\+/g,'');
-    return string.substr(0, 16);
+    return string.substr(0, 32);
 };
 
 // 加密
@@ -50,18 +51,37 @@ tools.crypt = function (string, type) {
 
 // 对象排序(属性名字段的ASCII码从小到大排序：字典排序)
 tools.sortstring = function (obj) {
+    console.log(obj);
+/*    return Object.keys(obj).filter(function (key) {
+       return obj[key] != undefined && obj[key] != "";
+    }).sort().map(function (key) {
+        return key + '=' + obj[key];
+    }).join('&');*/
     var self = this;
     var keys = Object.keys(obj).sort();
-    var newObj = {};
+    var newObj = [];
+    var str = "";
     keys.forEach(function (item) {
         // 空的选项不参与加密
         var str = self.trim(obj[item]);
         if(str!=""){
-            newObj[item] = obj[item];
+            newObj.push([item] + '=' + obj[item]);
         }
     });
 
-    return decodeURIComponent(qs.stringify(newObj));
+    console.log(newObj);
+
+    newObj.forEach(function (item) {
+       str += item + '&'
+    });
+
+    console.log(str);
+    str = str.substr(0, str.length-1);
+    console.log(str);
+    //console.log(newObj.join('&'));
+
+    return str;
+    //return qs.stringify(newObj,null,null, {encodeUIIComponent: this.gbkEncodeURIComponent});
 };
 
 tools.trim = function (str) {
@@ -73,6 +93,6 @@ tools.trim = function (str) {
 };
 
 tools.gbkEncodeURIComponent = function (string) {
-
+    return;
 };
 

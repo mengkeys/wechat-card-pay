@@ -65,11 +65,11 @@ CardPay.prototype.generate = function (options) {
 // 参数为空不参与签名
 CardPay.prototype.sign = function (obj) {
     var stringA = tools.sortstring(obj);
-    console.log(stringA);
+    //console.log(stringA);
     var stringSignTemp = stringA+'&key='+ this.key;
-    console.log(stringSignTemp);
+    //console.log(stringSignTemp);
     var sign =  tools.crypt(stringSignTemp,'md5');
-    console.log(sign.toUpperCase());
+    //console.log(sign.toUpperCase());
     return sign.toUpperCase();
 };
 
